@@ -1,0 +1,11 @@
+{
+  "variant": 14,
+  "noise": {
+    "type": "gaussian",
+    "sigma": 14.0
+  },
+  "denoise": {
+    "method": "median",
+    "kernel_size": 3
+  }
+}
