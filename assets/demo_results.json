@@ -1,0 +1,42 @@
+{
+  "variant": 14,
+  "noise_config": {
+    "type": "gaussian",
+    "sigma": 14.0,
+    "salt_pepper_prob": 0.02
+  },
+  "denoise_config": {
+    "method": "median",
+    "kernel_size": 3,
+    "blur_radius": 1.0
+  },
+  "analysis": {
+    "clean": {
+      "mean": 141.2129669189453,
+      "std": 79.02349008091818,
+      "var": 6244.711984568974,
+      "min": 0.0,
+      "max": 255.0
+    },
+    "noisy": {
+      "mean": 140.62867736816406,
+      "std": 79.41584314436405,
+      "var": 6306.876142330235,
+      "min": 0.0,
+      "max": 255.0
+    },
+    "sigma_est_noisy": 11.8608,
+    "mse_clean_noisy": 183.06210327148438,
+    "psnr_clean_noisy": 25.504819130355003,
+    "denoised": {
+      "mean": 140.6554412841797,
+      "std": 79.00673603550355,
+      "var": 6242.064338983735,
+      "min": 0.0,
+      "max": 255.0
+    },
+    "sigma_est_denoised": 1.4826,
+    "mse_clean_denoised": 33.745758056640625,
+    "psnr_clean_denoised": 32.84861172393519
+  }
+}
