@@ -1,0 +1,26 @@
+{
+  "variant": 14,
+  "sample_rate": 22050,
+  "stft": {
+    "n_fft": 2048,
+    "hop_length": 512,
+    "window": "hann"
+  },
+  "noise_estimation": {
+    "method": "median_per_frequency",
+    "scale": 1.0
+  },
+  "denoise": {
+    "method": "spectral_subtraction",
+    "floor_ratio": 0.02,
+    "savgol": {
+      "enabled": true,
+      "window_length": 11,
+      "polyorder": 2
+    }
+  },
+  "energy_search": {
+    "dt_sec": 0.1,
+    "df_hz": 50
+  }
+}

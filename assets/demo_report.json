@@ -1,0 +1,99 @@
+{
+  "variant": 14,
+  "input": {
+    "path": "D:\\Feature-based_classification_profile_analysis\\Noise_analysis\\assets\\demo_input.wav",
+    "sr": 22050,
+    "samples": 66150,
+    "duration_sec": 3.0
+  },
+  "config": {
+    "variant": 14,
+    "sample_rate": 22050,
+    "stft": {
+      "n_fft": 2048,
+      "hop_length": 512,
+      "window": "hann"
+    },
+    "noise_estimation": {
+      "method": "median_per_frequency",
+      "scale": 1.0
+    },
+    "denoise": {
+      "method": "spectral_subtraction",
+      "floor_ratio": 0.02,
+      "savgol": {
+        "enabled": true,
+        "window_length": 11,
+        "polyorder": 2
+      }
+    },
+    "energy_search": {
+      "dt_sec": 0.1,
+      "df_hz": 50
+    }
+  },
+  "noise_profile": {
+    "method": "median_per_frequency",
+    "scale": 1.0
+  },
+  "denoise": {
+    "method": "spectral_subtraction",
+    "floor_ratio": 0.02,
+    "savgol": {
+      "enabled": true,
+      "window_length": 11,
+      "polyorder": 2
+    }
+  },
+  "energy_peaks": {
+    "dt_sec": 0.1,
+    "df_hz": 50.0,
+    "peaks": [
+      {
+        "time_sec": 1.35,
+        "energy": 0.00032467827879536566,
+        "dominant_band_hz_start": 400.0,
+        "dominant_band_hz_end": 450.0
+      },
+      {
+        "time_sec": 1.6500000000000001,
+        "energy": 0.00028189486142779567,
+        "dominant_band_hz_start": 8400.0,
+        "dominant_band_hz_end": 8450.0
+      },
+      {
+        "time_sec": 1.9500000000000002,
+        "energy": 0.00027249409400074395,
+        "dominant_band_hz_start": 6150.0,
+        "dominant_band_hz_end": 6200.0
+      },
+      {
+        "time_sec": 2.25,
+        "energy": 0.0002621511168861408,
+        "dominant_band_hz_start": 7650.0,
+        "dominant_band_hz_end": 7700.0
+      },
+      {
+        "time_sec": 2.6500000000000004,
+        "energy": 0.00031113267336348405,
+        "dominant_band_hz_start": 4800.0,
+        "dominant_band_hz_end": 4850.0
+      },
+      {
+        "time_sec": 2.8500000000000005,
+        "energy": 0.00023675545528087106,
+        "dominant_band_hz_start": 4450.0,
+        "dominant_band_hz_end": 4500.0
+      }
+    ]
+  },
+  "quality": {
+    "psnr_db_input_vs_denoised": 32.24589995131508
+  },
+  "outputs": {
+    "denoised_wav": "D:\\Feature-based_classification_profile_analysis\\Noise_analysis\\outputs\\denoised.wav",
+    "spectrogram_before_png": "D:\\Feature-based_classification_profile_analysis\\Noise_analysis\\assets\\spectrogram_before.png",
+    "spectrogram_after_png": "D:\\Feature-based_classification_profile_analysis\\Noise_analysis\\assets\\spectrogram_after.png",
+    "spectrogram_compare_png": "D:\\Feature-based_classification_profile_analysis\\Noise_analysis\\assets\\spectrogram_compare.png"
+  }
+}
