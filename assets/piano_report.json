@@ -1,0 +1,234 @@
+{
+  "variant": 14,
+  "input": {
+    "path": "..\\piano.mp3",
+    "sample_rate_after_hz": 22050,
+    "samples_after": 442104,
+    "duration_sec": 20.050068027210884,
+    "source": {
+      "path": "..\\piano.mp3",
+      "sample_rate_hz": 44100,
+      "channels": 2,
+      "frames": 884207,
+      "duration_sec": 20.050045351473923,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    "repo_copy": "assets/piano.mp3",
+    "converted_wav": "assets/piano_mono_22050.wav"
+  },
+  "config": {
+    "variant": 14,
+    "sample_rate": 22050,
+    "stft": {
+      "n_fft": 2048,
+      "hop_length": 512,
+      "window": "hann"
+    },
+    "noise_estimation": {
+      "method": "median_per_frequency",
+      "scale": 1.0
+    },
+    "denoise": {
+      "method": "spectral_subtraction",
+      "floor_ratio": 0.02,
+      "savgol": {
+        "enabled": true,
+        "window_length": 11,
+        "polyorder": 2
+      }
+    },
+    "energy_search": {
+      "dt_sec": 0.1,
+      "df_hz": 50
+    }
+  },
+  "noise_profile": {
+    "method": "median_per_frequency",
+    "scale": 1.0,
+    "quiet_frame_fraction": 0.15,
+    "quiet_frame_count": 125,
+    "quiet_rms_before": 9.730297831939543e-06,
+    "quiet_rms_after": 6.48211961310177e-06,
+    "median_spectral_floor_before_db": -154.14260446156953,
+    "median_spectral_floor_after_db": -157.06159227743717
+  },
+  "denoise": {
+    "method": "spectral_subtraction",
+    "floor_ratio": 0.02,
+    "savgol": {
+      "enabled": true,
+      "window_length": 11,
+      "polyorder": 2
+    }
+  },
+  "energy_peaks": {
+    "dt_sec": 0.1,
+    "df_hz": 50.0,
+    "peaks": [
+      {
+        "time_sec": 1.05,
+        "energy": 0.025226685730819917,
+        "dominant_band_hz_start": 500.0,
+        "dominant_band_hz_end": 550.0
+      },
+      {
+        "time_sec": 3.8500000000000005,
+        "energy": 0.027730541830907174,
+        "dominant_band_hz_start": 500.0,
+        "dominant_band_hz_end": 550.0
+      },
+      {
+        "time_sec": 4.25,
+        "energy": 0.027529433693428407,
+        "dominant_band_hz_start": 650.0,
+        "dominant_band_hz_end": 700.0
+      },
+      {
+        "time_sec": 4.75,
+        "energy": 0.04555905184552509,
+        "dominant_band_hz_start": 600.0,
+        "dominant_band_hz_end": 650.0
+      },
+      {
+        "time_sec": 7.550000000000001,
+        "energy": 0.03820083925888837,
+        "dominant_band_hz_start": 600.0,
+        "dominant_band_hz_end": 650.0
+      },
+      {
+        "time_sec": 8.45,
+        "energy": 0.022165437032639037,
+        "dominant_band_hz_start": 500.0,
+        "dominant_band_hz_end": 550.0
+      },
+      {
+        "time_sec": 11.150000000000002,
+        "energy": 0.018502414449757035,
+        "dominant_band_hz_start": 500.0,
+        "dominant_band_hz_end": 550.0
+      },
+      {
+        "time_sec": 11.650000000000002,
+        "energy": 0.02517814112786968,
+        "dominant_band_hz_start": 650.0,
+        "dominant_band_hz_end": 700.0
+      },
+      {
+        "time_sec": 12.05,
+        "energy": 0.027515564268309096,
+        "dominant_band_hz_start": 600.0,
+        "dominant_band_hz_end": 650.0
+      },
+      {
+        "time_sec": 13.05,
+        "energy": 0.01807745027776388,
+        "dominant_band_hz_start": 600.0,
+        "dominant_band_hz_end": 650.0
+      }
+    ]
+  },
+  "top_energy_cells": [
+    {
+      "rank": 1,
+      "t0_sec": 7.5,
+      "t1_sec": 7.6000000000000005,
+      "f0_hz": 600.0,
+      "f1_hz": 650.0,
+      "energy": 0.02412554414272431
+    },
+    {
+      "rank": 2,
+      "t0_sec": 7.4,
+      "t1_sec": 7.5,
+      "f0_hz": 600.0,
+      "f1_hz": 650.0,
+      "energy": 0.020625404885454814
+    },
+    {
+      "rank": 3,
+      "t0_sec": 4.7,
+      "t1_sec": 4.800000000000001,
+      "f0_hz": 600.0,
+      "f1_hz": 650.0,
+      "energy": 0.020543983091262524
+    },
+    {
+      "rank": 4,
+      "t0_sec": 4.7,
+      "t1_sec": 4.800000000000001,
+      "f0_hz": 300.0,
+      "f1_hz": 350.0,
+      "energy": 0.016380725461958307
+    },
+    {
+      "rank": 5,
+      "t0_sec": 4.800000000000001,
+      "t1_sec": 4.9,
+      "f0_hz": 600.0,
+      "f1_hz": 650.0,
+      "energy": 0.014421639971174613
+    },
+    {
+      "rank": 6,
+      "t0_sec": 11.600000000000001,
+      "t1_sec": 11.700000000000001,
+      "f0_hz": 650.0,
+      "f1_hz": 700.0,
+      "energy": 0.011223274590028795
+    },
+    {
+      "rank": 7,
+      "t0_sec": 4.6000000000000005,
+      "t1_sec": 4.7,
+      "f0_hz": 600.0,
+      "f1_hz": 650.0,
+      "energy": 0.01115529006394736
+    },
+    {
+      "rank": 8,
+      "t0_sec": 4.6000000000000005,
+      "t1_sec": 4.7,
+      "f0_hz": 300.0,
+      "f1_hz": 350.0,
+      "energy": 0.010852836399241002
+    },
+    {
+      "rank": 9,
+      "t0_sec": 3.7,
+      "t1_sec": 3.8000000000000003,
+      "f0_hz": 500.0,
+      "f1_hz": 550.0,
+      "energy": 0.010328031275673845
+    },
+    {
+      "rank": 10,
+      "t0_sec": 12.100000000000001,
+      "t1_sec": 12.200000000000001,
+      "f0_hz": 600.0,
+      "f1_hz": 650.0,
+      "energy": 0.010248704760753898
+    }
+  ],
+  "global_maximum": {
+    "rank": 1,
+    "t0_sec": 7.5,
+    "t1_sec": 7.6000000000000005,
+    "f0_hz": 600.0,
+    "f1_hz": 650.0,
+    "energy": 0.02412554414272431
+  },
+  "quality": {
+    "psnr_db_input_vs_denoised": 44.17414503760364,
+    "rms_before": 0.042733896162302096,
+    "rms_after": 0.041108486193549836
+  },
+  "outputs": {
+    "denoised_wav": "assets/piano_denoised.wav",
+    "spectrogram_before_png": "assets/spectrogram_before.png",
+    "spectrogram_after_png": "assets/spectrogram_after.png",
+    "spectrogram_compare_png": "assets/spectrogram_compare.png",
+    "analysis_overview_png": "assets/analysis_overview.png",
+    "energy_map_png": "assets/energy_map.png"
+  }
+}

@@ -48,6 +48,30 @@ class EnergySearchConfig:
     df_hz: float = 50.0
 
 
+@dataclass(frozen=True)
+class AudioMetadata:
+    path: str
+    sample_rate_hz: int
+    channels: int
+    frames: int
+    duration_sec: float
+    format: str
+    subtype: str
+
+
+def inspect_audio(path: str | Path) -> AudioMetadata:
+    info = sf.info(str(path))
+    return AudioMetadata(
+        path=str(path),
+        sample_rate_hz=int(info.samplerate),
+        channels=int(info.channels),
+        frames=int(info.frames),
+        duration_sec=float(info.duration),
+        format=str(info.format),
+        subtype=str(info.subtype),
+    )
+
+
 def load_audio_mono(path: str | Path, *, target_sr: int | None = None) -> tuple[np.ndarray, int]:
     """
     Loads audio file to mono float32 in [-1, 1], returns (y, sr).
@@ -119,6 +143,27 @@ def estimate_noise_profile(mag: np.ndarray, cfg: NoiseEstimationConfig) -> np.nd
     return prof * float(cfg.scale)
 
 
+def select_quiet_frames(mag: np.ndarray, *, fraction: float = 0.15) -> np.ndarray:
+    if mag.ndim != 2 or mag.shape[1] == 0:
+        return np.array([], dtype=int)
+    frame_energy = np.sum(mag**2, axis=0)
+    n_select = max(1, int(math.ceil(frame_energy.size * fraction)))
+    return np.argsort(frame_energy)[:n_select]
+
+
+def estimate_noise_profile_from_quiet_frames(
+    mag: np.ndarray,
+    cfg: NoiseEstimationConfig,
+    *,
+    quiet_fraction: float = 0.15,
+) -> tuple[np.ndarray, np.ndarray]:
+    quiet_idx = select_quiet_frames(mag, fraction=quiet_fraction)
+    if quiet_idx.size == 0:
+        return estimate_noise_profile(mag, cfg), quiet_idx
+    prof = np.median(mag[:, quiet_idx], axis=1)
+    return prof * float(cfg.scale), quiet_idx
+
+
 def spectral_subtraction(
     mag: np.ndarray,
     noise_prof: np.ndarray,
@@ -184,6 +229,100 @@ def psnr_db(ref: np.ndarray, test: np.ndarray) -> float:
         return float("inf")
     peak = 1.0
     return float(10.0 * math.log10((peak * peak) / mse))
+
+
+def rms(x: np.ndarray) -> float:
+    x = np.asarray(x, dtype=np.float64)
+    if x.size == 0:
+        return 0.0
+    return float(np.sqrt(np.mean(x**2)))
+
+
+def db20(x: np.ndarray | float, *, floor: float = 1e-12) -> np.ndarray | float:
+    arr = np.asarray(x, dtype=np.float64)
+    out = 20.0 * np.log10(np.maximum(arr, floor))
+    if np.isscalar(x):
+        return float(out)
+    return out
+
+
+def frame_signal_rms(y: np.ndarray, frame_len: int, hop_len: int) -> np.ndarray:
+    if y.size == 0:
+        return np.array([], dtype=np.float64)
+    values: list[float] = []
+    for start in range(0, max(1, y.size - frame_len + 1), hop_len):
+        end = min(y.size, start + frame_len)
+        values.append(rms(y[start:end]))
+    if not values:
+        values.append(rms(y))
+    return np.asarray(values, dtype=np.float64)
+
+
+def aggregate_energy_map(
+    mag: np.ndarray,
+    freqs_hz: np.ndarray,
+    times_sec: np.ndarray,
+    cfg: EnergySearchConfig,
+) -> dict[str, np.ndarray | float]:
+    dt = float(cfg.dt_sec)
+    df = float(cfg.df_hz)
+
+    f_max = float(freqs_hz.max()) if freqs_hz.size else 0.0
+    t_end = float(times_sec.max()) if times_sec.size else 0.0
+    n_bands = max(1, int(math.ceil((f_max + 1e-9) / df)))
+    n_windows = max(1, int(math.ceil((t_end + 1e-9) / dt)))
+
+    freq_edges = np.arange(n_bands + 1, dtype=np.float64) * df
+    time_edges = np.arange(n_windows + 1, dtype=np.float64) * dt
+    energy = np.zeros((n_bands, n_windows), dtype=np.float64)
+
+    for bi in range(n_bands):
+        f0 = freq_edges[bi]
+        f1 = freq_edges[bi + 1]
+        f_idx = np.where((freqs_hz >= f0) & (freqs_hz < f1))[0]
+        if f_idx.size == 0:
+            continue
+        band_power = np.sum(mag[f_idx, :] ** 2, axis=0)
+        for wi in range(n_windows):
+            t0 = time_edges[wi]
+            t1 = time_edges[wi + 1]
+            t_idx = np.where((times_sec >= t0) & (times_sec < t1))[0]
+            if t_idx.size:
+                energy[bi, wi] = float(np.sum(band_power[t_idx]))
+
+    return {
+        "energy": energy,
+        "freq_edges": freq_edges,
+        "time_edges": time_edges,
+        "dt_sec": dt,
+        "df_hz": df,
+    }
+
+
+def summarize_top_energy_cells(
+    energy_map: np.ndarray,
+    freq_edges: np.ndarray,
+    time_edges: np.ndarray,
+    *,
+    top_k: int = 10,
+) -> list[dict[str, float]]:
+    if energy_map.size == 0:
+        return []
+    flat_idx = np.argsort(energy_map.ravel())[::-1][:top_k]
+    results: list[dict[str, float]] = []
+    for rank, idx in enumerate(flat_idx, start=1):
+        bi, wi = np.unravel_index(int(idx), energy_map.shape)
+        results.append(
+            {
+                "rank": rank,
+                "t0_sec": float(time_edges[wi]),
+                "t1_sec": float(time_edges[wi + 1]),
+                "f0_hz": float(freq_edges[bi]),
+                "f1_hz": float(freq_edges[bi + 1]),
+                "energy": float(energy_map[bi, wi]),
+            }
+        )
+    return results
 
 
 def energy_peaks(
